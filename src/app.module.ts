@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActorModule } from './actor/actor.module';
 import { WriterModule } from './writer/writer.module';
 import { ProductionCompModule } from './production-comp/production-comp.module';
+import { DistributorCompModule } from './distributor-comp/distributor-comp.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { ProductionCompModule } from './production-comp/production-comp.module';
     DirectorModule,
     ActorModule,
     WriterModule,
-    ProductionCompModule
+    ProductionCompModule,
+    DistributorCompModule
   ],
   controllers: [AppController],
   providers: [AppService],
