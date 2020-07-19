@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { DirectorModule } from './director/director.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActorModule } from './actor/actor.module';
+import { WriterModule } from './writer/writer.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
     DirectorModule,
-    ActorModule
+    ActorModule,
+    WriterModule
   ],
   controllers: [AppController],
   providers: [AppService],
