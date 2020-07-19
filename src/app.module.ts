@@ -5,13 +5,15 @@ import { DirectorModule } from './director/director.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActorModule } from './actor/actor.module';
 import { WriterModule } from './writer/writer.module';
+import { ProductionCompModule } from './production-comp/production-comp.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
     DirectorModule,
     ActorModule,
-    WriterModule
+    WriterModule,
+    ProductionCompModule
   ],
   controllers: [AppController],
   providers: [AppService],
