@@ -7,6 +7,7 @@ import { ActorModule } from './actor/actor.module';
 import { WriterModule } from './writer/writer.module';
 import { ProductionCompModule } from './production-comp/production-comp.module';
 import { DistributorCompModule } from './distributor-comp/distributor-comp.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { DistributorCompModule } from './distributor-comp/distributor-comp.modul
     ActorModule,
     WriterModule,
     ProductionCompModule,
-    DistributorCompModule
+    DistributorCompModule,
+    LocationModule
   ],
   controllers: [AppController],
   providers: [AppService],
