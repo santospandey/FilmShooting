@@ -17,8 +17,8 @@ export class ActorController {
     }
 
     @Post()
-    createActor(@Body() actor:ActorDTO):Promise<ActorDTO>{
-        return this.actorService.create(actor);
+    async createActor(@Body() actor:ActorDTO):Promise<ActorDTO>{
+        return await this.actorService.create(actor);
     }
 
     @Put(":id")

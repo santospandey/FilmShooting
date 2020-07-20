@@ -19,7 +19,7 @@ export class ActorService {
     }
 
     async create(actorData:ActorDTO):Promise<ActorDTO>{
-        const actor = await new ActorEntity();
+        const actor = new ActorEntity();
         actor.first_name = actorData.first_name;
         actor.last_name = actorData.last_name;
         await this.actorRepository.save(actor);

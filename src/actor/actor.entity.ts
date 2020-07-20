@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, Entity } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn } from "typeorm";
 
 @Entity("actor")
 export class ActorEntity{
@@ -10,4 +10,7 @@ export class ActorEntity{
 
     @Column()
     last_name:string;
+
+    @CreateDateColumn()
+    created:Date
 }

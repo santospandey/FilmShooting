@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
+import { FilmEntity } from "src/film/film.entity";
 
-@Entity("production-company")
+@Entity("production_company")
 export class ProductionCompEntity{
     @PrimaryGeneratedColumn("uuid")
     id:string;
@@ -10,4 +11,7 @@ export class ProductionCompEntity{
 
     @CreateDateColumn()
     created:Date
+
+    @OneToMany(type=>FilmEntity, film=>film.productionCompany)
+    films:FilmEntity[]
 }

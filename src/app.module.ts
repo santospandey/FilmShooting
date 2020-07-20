@@ -8,6 +8,7 @@ import { WriterModule } from './writer/writer.module';
 import { ProductionCompModule } from './production-comp/production-comp.module';
 import { DistributorCompModule } from './distributor-comp/distributor-comp.module';
 import { LocationModule } from './location/location.module';
+import { FilmModule } from './film/film.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { LocationModule } from './location/location.module';
     WriterModule,
     ProductionCompModule,
     DistributorCompModule,
-    LocationModule
+    LocationModule,
+    FilmModule
   ],
   controllers: [AppController],
   providers: [AppService],
