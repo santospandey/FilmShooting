@@ -19,10 +19,12 @@ export class LocationService {
     }
 
     async create(locationData:LocationDTO):Promise<LocationDTO>{
-        const distributorComp = new LocationEntity();
-        distributorComp.name = locationData.name;
-        await this.locationRepository.save(distributorComp);
-        return distributorComp;
+        const locationEntity = new LocationEntity();
+        locationEntity.name = locationData.name;
+        locationEntity.latitude = locationData.latitude;
+        locationEntity.longitude = locationData.longitude;
+        await this.locationRepository.save(locationEntity);
+        return locationEntity;
     }
 
     async update(id:string, locationData:LocationDTO):Promise<LocationDTO>{

@@ -19,7 +19,7 @@ import { FilmModule } from './film/film.module';
     ProductionCompModule,
     DistributorCompModule,
     LocationModule,
-    FilmModule
+    FilmModule,
   ],
   controllers: [AppController],
   providers: [AppService],

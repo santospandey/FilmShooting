@@ -1,3 +1,5 @@
-export class LocationDTO{
-    name:string;
+export class LocationDTO {
+    name: string;
+    latitude: string;
+    longitude: string;
 }

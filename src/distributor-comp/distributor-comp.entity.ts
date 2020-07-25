@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
-import { FilmEntity } from "src/film/film.entity";
+import { FilmEntity } from "src/film/entity/film.entity";
 
 @Entity("distributor_company")
 export class DistributorCompEntity{

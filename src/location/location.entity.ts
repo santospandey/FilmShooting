@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, OneToMany } from "typeorm";
 
 @Entity("location")
 export class LocationEntity{
@@ -7,6 +7,12 @@ export class LocationEntity{
 
     @Column()
     name:string;
+
+    @Column()
+    latitude:string;
+
+    @Column()
+    longitude:string;
 
     @CreateDateColumn()
     created:Date

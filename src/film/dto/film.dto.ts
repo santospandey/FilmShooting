@@ -6,4 +6,5 @@ export class FilmDTO {
     actorsId: string[];
     writersId: string[];
     directorsId: string[];
+    locationsId: string[];
 }
