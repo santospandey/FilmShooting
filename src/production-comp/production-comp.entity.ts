@@ -13,5 +13,5 @@ export class ProductionCompEntity{
     created:Date
 
     @OneToMany(type=>FilmEntity, film=>film.productionCompany)
-    films:FilmEntity[]
+    films?:FilmEntity[]
 }
