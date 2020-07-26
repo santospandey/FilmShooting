@@ -5,10 +5,10 @@ export class ActorEntity{
     @PrimaryGeneratedColumn("uuid")
     id:string;
 
-    @Column()
+    @Column()    
     first_name:string;
 
-    @Column()
+    @Column()    
     last_name:string;
 
     @CreateDateColumn()

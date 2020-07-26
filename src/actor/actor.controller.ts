@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, Delete, ValidationPipe } from '@nestjs/common';
 import { ActorService } from './actor.service';
 import { ActorDTO } from './actor.dto';
 
@@ -17,12 +17,12 @@ export class ActorController {
     }
 
     @Post()
-    async createActor(@Body() actor:ActorDTO):Promise<ActorDTO>{
+    async createActor(@Body(new ValidationPipe()) actor:ActorDTO):Promise<ActorDTO>{
         return await this.actorService.create(actor);
     }
 
     @Put(":id")
-    updateActor(@Param("id") id:string, @Body() actor:ActorDTO):Promise<ActorDTO>{
+    updateActor(@Param("id") id:string, @Body(new ValidationPipe()) actor:Partial<ActorDTO>):Promise<ActorDTO>{
         return this.actorService.update(id, actor);
     }
 
