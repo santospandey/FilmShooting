@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, Delete, ValidationPipe } from '@nestjs/common';
 import { LocationService } from './location.service';
 import { LocationDTO } from './location.dto';
 
@@ -17,12 +17,12 @@ export class LocationController {
     }
 
     @Post()
-    async createLocation(@Body() location:LocationDTO):Promise<LocationDTO>{
+    async createLocation(@Body(new ValidationPipe()) location:LocationDTO):Promise<LocationDTO>{
         return await this.locationService.create(location);
     }
 
     @Put(":id")
-    async updateLocation(@Param("id") id:string, @Body() location:LocationDTO):Promise<LocationDTO>{
+    async updateLocation(@Param("id") id:string, @Body(new ValidationPipe()) location:Partial<LocationDTO>):Promise<LocationDTO>{
         return await this.locationService.update(id, location);
     }
 

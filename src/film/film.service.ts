@@ -1,18 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository, In, Like } from 'typeorm';
 import { FilmEntity } from './entity/film.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilmDTO } from './dto/film.dto';
-import { ProductionCompEntity } from 'src/production-comp/production-comp.entity';
+import { ProductionCompEntity } from '../production-comp/production-comp.entity';
 import { DistributorCompEntity } from '../distributor-comp/distributor-comp.entity';
 import { ActorEntity } from '../actor/actor.entity';
 import { WriterEntity } from '../writer/writer.entity';
 import { DirectorEntity } from '../director/director.entity';
 import { FilmResponse } from './dto/filmResponse.dto';
-import { LocationEntity } from 'src/location/location.entity';
+import { LocationEntity } from '../location/location.entity';
 
 @Injectable()
 export class FilmService {
+    static relationTables = ["productionCompany", "distributorCompany", "directors", "writers", "actors", "locations"];
     constructor(
         @InjectRepository(FilmEntity)
         private filmRepository: Repository<FilmEntity>,
@@ -37,43 +38,59 @@ export class FilmService {
     ) { }
 
     async get(title: string): Promise<FilmResponse[]> {
-        const query = title || "";        
-        return await this.filmRepository.find({ relations: ["productionCompany", "distributorCompany", "directors", "writers", "actors", "locations"], where: { title: Like(`%${query}%`) } });
+        const query = title || "";
+        return await this.filmRepository.find({
+            relations: FilmService.relationTables,
+            where: { title: Like(`%${query}%`) },
+            order: { created: "DESC" }
+        });
     }
 
     async getByID(id: string): Promise<FilmResponse> {
-        return await this.filmRepository.findOne(id, { relations: ["productionCompany", "distributorCompany", "directors", "writers", "actors", "locations"] });
+        const film = await this.filmRepository.findOne(id, { relations: FilmService.relationTables });
+        if (!film) {
+            throw new NotFoundException("Film Not Found");
+        }
+        return film;
     }
 
     async create(filmData: FilmDTO): Promise<FilmResponse> {
         const film = new FilmEntity();
-        film.title = filmData.title;
-        film.release_date = new Date(filmData.release_date);
+        try {
+            const { title, release_date, productionCompanyId, distributorCompanyId, actorsId, writersId, directorsId, locationsId } = filmData;
+            if (title) {
+                film.title = title;
+            }
+            if (release_date) {
+                film.release_date = new Date(release_date);
+            }
+            if (productionCompanyId) {
+                film.productionCompany = await this.productionRepository.findOne({ where: { id: productionCompanyId } });
+            }
+            if (distributorCompanyId) {
+                film.distributorCompany = await this.distributorRepository.findOne({ where: { id: distributorCompanyId } });
+            }
+            if (actorsId) {
+                film.actors = await this.actorRepository.find({ id: In(actorsId) });
+            }
+            if (writersId) {
+                film.writers = await this.writerRepository.find({ id: In(writersId) });
+            }
+            if (directorsId) {
+                film.directors = await this.directorRepository.find({ id: In(directorsId) });
+            }
+            if (locationsId) {
+                film.locations = await this.locationRepository.find({ id: In(locationsId) });
+            }
+        }
+        catch (err) {
+            throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        const prodCompId: string = filmData.productionCompanyId;
-        const distCompId: string = filmData.distributorCompanyId;
-        const actorsId: string[] = filmData.actorsId;
-        const writersId: string[] = filmData.writersId;
-        const directorsId: string[] = filmData.directorsId;
-        const locationsId: string[] = filmData.locationsId;
-
-        const prodCompany = await this.productionRepository.findOne({ where: { id: prodCompId } });
-        const distCompany = await this.distributorRepository.findOne({ where: { id: distCompId } });
-        const actors = await this.actorRepository.find({ id: In(actorsId) });
-        const writers = await this.writerRepository.find({ id: In(writersId) });
-        const directors = await this.directorRepository.find({ id: In(directorsId) });
-        const locations = await this.locationRepository.find({ id: In(locationsId) });
-
-        film.productionCompany = prodCompany;
-        film.distributorCompany = distCompany;
-        film.actors = actors;
-        film.writers = writers;
-        film.directors = directors;
-        film.locations = locations;
-
-        this.filmRepository.save(film);
+        await this.filmRepository.save(film);
         return film;
     }
+
 
     async update(id: string, filmData: Partial<FilmDTO>): Promise<FilmResponse> {
         const film = await this.filmRepository.findOne(id);
@@ -81,30 +98,41 @@ export class FilmService {
             throw new NotFoundException("Film Not found");
         }
 
-        const prodCompId: string = filmData.productionCompanyId;
-        const distCompId: string = filmData.distributorCompanyId;
-        const actorsId: string[] = filmData.actorsId;
-        const writersId: string[] = filmData.writersId;
-        const directorsId: string[] = filmData.directorsId;
-        const locationsId: string[] = filmData.locationsId;
-
-        const prodCompany = await this.productionRepository.findOne({ where: { id: prodCompId } });
-        const distCompany = await this.distributorRepository.findOne({ where: { id: distCompId } });
-        const actors = await this.actorRepository.find({ id: In(actorsId) });
-        const writers = await this.writerRepository.find({ id: In(writersId) });
-        const directors = await this.directorRepository.find({ id: In(directorsId) });
-        const locations = await this.locationRepository.find({ id: In(locationsId) });
-
-        film.productionCompany = prodCompany;
-        film.distributorCompany = distCompany;
-        film.actors = actors;
-        film.writers = writers;
-        film.directors = directors;
-        film.locations = locations;
+        try {
+            const { title, release_date, productionCompanyId, distributorCompanyId, actorsId, writersId, directorsId, locationsId } = filmData;
+            if (title) {
+                film.title = title;
+            }
+            if (release_date) {
+                film.release_date = new Date(release_date);
+            }
+            if (productionCompanyId) {
+                film.productionCompany = await this.productionRepository.findOne({ where: { id: productionCompanyId } });
+            }
+            if (distributorCompanyId) {
+                film.distributorCompany = await this.distributorRepository.findOne({ where: { id: distributorCompanyId } });
+            }
+            if (actorsId) {
+                film.actors = await this.actorRepository.find({ id: In(actorsId) });
+            }
+            if (writersId) {
+                film.writers = await this.writerRepository.find({ id: In(writersId) });
+            }
+            if (directorsId) {
+                film.directors = await this.directorRepository.find({ id: In(directorsId) });
+            }
+            if (locationsId) {
+                film.locations = await this.locationRepository.find({ id: In(locationsId) });
+            }
+        }
+        catch (err) {
+            throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         await this.filmRepository.update(id, film);
         return await this.filmRepository.findOne(id);
     }
+
 
     async delete(id: string): Promise<FilmResponse> {
         const film = await this.filmRepository.findOne(id);

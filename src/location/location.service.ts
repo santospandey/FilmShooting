@@ -15,7 +15,11 @@ export class LocationService {
     }
 
     async getById(id:string):Promise<LocationDTO>{
-        return await this.locationRepository.findOne(id);
+        const location = await this.locationRepository.findOne(id);
+        if(!location){
+            throw new NotFoundException("Location Not Found");
+        }
+        return location;
     }
 
     async create(locationData:LocationDTO):Promise<LocationDTO>{
@@ -27,7 +31,7 @@ export class LocationService {
         return locationEntity;
     }
 
-    async update(id:string, locationData:LocationDTO):Promise<LocationDTO>{
+    async update(id:string, locationData:Partial<LocationDTO>):Promise<LocationDTO>{
         const location = await this.locationRepository.findOne(id);
         if(!location){
             throw new NotFoundException("Distributor Company Not found");

@@ -6,7 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import * as faker from "faker";
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
-class DistributorCompRepositoryFake {
+export default class DistributorCompRepositoryFake {
   public async find(): Promise<void> { };
   public async findOne(): Promise<void> { };
   public async save(): Promise<void> { };

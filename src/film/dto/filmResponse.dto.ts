@@ -5,7 +5,6 @@ import { WriterDTO } from "../../writer/writer.dto";
 import { ActorDTO } from "../../actor/actor.dto";
 import { LocationDTO } from "../../location/location.dto";
 
-
 export class FilmResponse{
     id: string;
     title: string;

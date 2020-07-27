@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body, Put, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete, Query, ValidationPipe } from '@nestjs/common';
 import { FilmService } from './film.service';
 import { FilmDTO } from './dto/film.dto';
 import { FilmResponse } from './dto/filmResponse.dto';
@@ -8,27 +8,27 @@ export class FilmController {
     constructor(private filmService:FilmService){}
 
     @Get()
-    async getFilms(@Query("title") title:string):Promise<FilmResponse[]>{
-        return await this.filmService.get(title);
+    getFilms(@Query("title") title:string):Promise<FilmResponse[]>{
+        return this.filmService.get(title);
     }
 
     @Get(":id")
-    async getFilmByID(@Param("id") id:string): Promise<FilmResponse>{
-        return await this.filmService.getByID(id);
+    getFilmByID(@Param("id") id:string): Promise<FilmResponse>{
+        return this.filmService.getByID(id);
     }
 
     @Post()
-    async createFilm(@Body() film: FilmDTO): Promise<FilmResponse>{
-        return await this.filmService.create(film);
+    createFilm(@Body(new ValidationPipe()) film: FilmDTO): Promise<FilmResponse>{
+        return this.filmService.create(film);
     }
 
     @Put(":id")
-    async updateFilm(@Param("id") id:string, @Body() film:FilmDTO):Promise<FilmResponse>{
-        return await this.filmService.update(id, film);
+    updateFilm(@Param("id") id:string, @Body(new ValidationPipe()) film:FilmDTO):Promise<FilmResponse>{
+        return this.filmService.update(id, film);
     }
 
     @Delete(":id")
-    async deleteFilm(@Param("id") id:string): Promise<FilmResponse>{
-        return await this.filmService.delete(id);
+    deleteFilm(@Param("id") id:string): Promise<FilmResponse>{
+        return this.filmService.delete(id);
     }
 }
