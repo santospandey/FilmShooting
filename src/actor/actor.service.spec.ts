@@ -5,7 +5,6 @@ import { ActorEntity } from './actor.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as faker from "faker";
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { ActorDTO } from './actor.dto';
 
 class ActorRepositoryFake {
   public async find(): Promise<void> { };
@@ -34,6 +33,51 @@ describe('ActorService', () => {
     actorRepository = module.get(getRepositoryToken(ActorEntity));
   });
 
+  describe("finding all actors", ()=>{
+    it("passes when the actors are fetched", async ()=>{
+      const actors = [1,2,3].map(num=>{
+        return {
+          id: faker.random.uuid(),
+          first_name: faker.name.firstName(),
+          last_name: faker.name.lastName(),
+          created: new Date()
+        }      
+      })
+      const actorRepositoryFindSpy = jest.spyOn(actorRepository, 'find').mockResolvedValue(actors);
+      const result = await actorService.get();
+      expect(result).toBe(actors);
+      expect(actorRepositoryFindSpy).toBeCalled();
+    })    
+  });
+
+  describe("finding an actor", () => {
+    it("throws exception when actor doesnot exist", async () => {
+      const actorId = faker.random.uuid();
+      try {
+        await actorService.getByID(actorId);
+      }
+      catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toBe("Actor Not Found");
+      }
+    });
+
+    it("returns the found actor", async () => {
+      const actorId = faker.random.uuid();
+      const existingActor: ActorEntity = {
+        id: actorId,
+        first_name: faker.name.firstName(),
+        last_name: faker.name.lastName(),
+        created: new Date()
+      }
+
+      const actorRepositoryFindSpy = jest.spyOn(actorRepository, 'findOne').mockResolvedValue(existingActor);
+      const result = await actorService.getByID(actorId);
+      expect(result).toBe(existingActor);
+      expect(actorRepositoryFindSpy).toHaveBeenLastCalledWith(actorId);
+    });
+  });
+
   describe("creating an actor", () => {
     it("throws an error when no name provided", async () => {
       const first_name = "";
@@ -59,50 +103,59 @@ describe('ActorService', () => {
       }
     })
 
-    it("calls the repository with correct parameters", async() => {      
+    it("calls the repository with correct parameters", async () => {
       const first_name = (faker.name.firstName()).toString();
       const last_name = (faker.name.lastName()).toString();
-      const createdActorEntity:ActorEntity = new ActorEntity();
-      createdActorEntity.first_name = first_name;
-      createdActorEntity.last_name = last_name;
-      
+      const createdActorEntity = { first_name, last_name };
+
+      const actorRepositorySaveSpy = jest.spyOn(actorRepository, 'save').mockResolvedValue(null);
       const result = await actorService.create(createdActorEntity);
-      expect(result.first_name).toEqual(first_name);
-      expect(result.last_name).toEqual(last_name);
+      expect(actorRepositorySaveSpy).toBeCalledWith(createdActorEntity);
+      expect(result.first_name).toBe(first_name);
+      expect(result.last_name).toBe(last_name);
     })
   });
 
-
-  describe("finding an actor", ()=>{
-    it("throws exception when actor doesnot exist", async()=>{
+  describe("removing an actor", () => {
+    it("calls the repository with correct parameters", async () => {
       const actorId = faker.random.uuid();
-      const actorRepositoryFindOneSpy = jest.spyOn(actorRepository, 'findOne').mockResolvedValue(null);
-      try{
-        await actorService.getByID(actorId);
-      }
-      catch(e){
-        expect(e).toBeInstanceOf(NotFoundException);
-        expect(e.message).toBe("Actor Not Found");
-      }
-    });
-
-    it("returns the found actor", async ()=>{
-      const actorId = faker.random.uuid();
-      const existingActor = new ActorEntity();
-      existingActor.id = actorId;
-      existingActor.first_name = faker.name.firstName();
-      existingActor.last_name = faker.name.lastName();
-      existingActor.created = new Date();
+      const existingActor: ActorEntity = {
+        id: actorId,
+        created: new Date(),
+        first_name: faker.name.firstName(),
+        last_name: faker.name.lastName()
+      };
 
       const actorRepositoryFindSpy = jest.spyOn(actorRepository, 'findOne').mockResolvedValue(existingActor);
-      const result = await actorService.getByID(actorId);
+      const actorRepositoryDeleteSpy = jest.spyOn(actorRepository, 'delete').mockResolvedValue(null);
+      const result = await actorService.delete(actorId);
+      expect(actorRepositoryFindSpy).toHaveBeenCalledWith(actorId);
       expect(result).toBe(existingActor);
-      expect(actorRepositoryFindSpy).toHaveBeenLastCalledWith(actorId);
+      expect(actorRepositoryDeleteSpy).toHaveBeenCalledWith(actorId);
     })
-  });
-
-  describe("removing an actor", ()=>{
-    
   })
 
+  describe("updating an actor", () => {
+    it("calls the repository with correct parameters", async () => {
+      const actorId = faker.random.uuid();
+      const first_name = faker.name.firstName();
+      const last_name = faker.name.lastName();
+
+      const newActorData: ActorEntity = {
+        id: actorId,
+        first_name,
+        last_name,
+        created: new Date()
+      };
+
+      const actorRepositoryFindSpy = jest.spyOn(actorRepository, 'findOne').mockResolvedValue(newActorData);
+      const actorRepositoryUpdateSpy = jest.spyOn(actorRepository, 'update').mockResolvedValue(null);
+
+      const result = await actorService.update(actorId, { first_name, last_name });
+
+      expect(actorRepositoryFindSpy).toHaveBeenCalledWith(actorId);
+      expect(actorRepositoryFindSpy).toHaveBeenCalledTimes(2);
+      expect(actorRepositoryUpdateSpy).toHaveBeenCalledWith(actorId, { first_name, last_name });
+    });
+  });
 });

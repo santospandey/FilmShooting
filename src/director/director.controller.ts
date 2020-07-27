@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put, Delete, ValidationPipe } from '@nestjs/common';
 import { DirectorService } from './director.service';
 import { DirectorDTO } from './director.dto';
 
@@ -17,12 +17,12 @@ export class DirectorController {
     }
 
     @Post()
-    createDirector(@Body() director: DirectorDTO): Promise<DirectorDTO> {
+    createDirector(@Body(new ValidationPipe()) director: DirectorDTO): Promise<DirectorDTO> {
         return this.directorService.createDirector(director);
     }
 
     @Put(":id")
-    update(@Param("id") id: string, @Body() director: DirectorDTO): Promise<DirectorDTO> {
+    update(@Param("id") id: string, @Body(new ValidationPipe()) director: Partial<DirectorDTO>): Promise<DirectorDTO> {
         return this.directorService.update(id, director);
     }
 
