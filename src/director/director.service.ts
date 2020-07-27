@@ -11,11 +11,15 @@ export class DirectorService {
         private directorRepository: Repository<DirectorEntity>) { }
 
     async getDirectors(): Promise<DirectorDTO[]> {
-        return await this.directorRepository.find();
+        return await this.directorRepository.find({ order: { created: "DESC" } });
     }
 
     async getDirectorById(id: string): Promise<DirectorDTO> {
-        return await this.directorRepository.findOne(id);
+        const director = await this.directorRepository.findOne(id);
+        if(!director){
+            throw new NotFoundException("Director Not Found");
+        }
+        return director;
     }
 
     async createDirector(director: DirectorDTO): Promise<DirectorDTO> {

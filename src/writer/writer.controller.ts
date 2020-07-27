@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, Delete, ValidationPipe } from '@nestjs/common';
 import { WriterService } from './writer.service';
 import { WriterDTO } from './writer.dto';
 
@@ -17,12 +17,12 @@ export class WriterController {
     }
 
     @Post()
-    createWriter(@Body() writer:WriterDTO):Promise<WriterDTO>{
+    createWriter(@Body(new ValidationPipe()) writer:WriterDTO):Promise<WriterDTO>{
         return this.writerService.create(writer);
     }
 
     @Put(":id")
-    updateWriter(@Param("id") id:string, @Body() writer):Promise<WriterDTO>{
+    updateWriter(@Param("id") id:string, @Body(new ValidationPipe()) writer:Partial<WriterDTO>):Promise<WriterDTO>{
         return this.writerService.update(id, writer);
     }
 

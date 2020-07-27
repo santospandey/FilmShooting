@@ -11,11 +11,15 @@ export class DistributorCompService {
         private distCompRepository:Repository<DistributorCompEntity>){}
     
     async get():Promise<DistributorCompDTO[]>{
-        return await this.distCompRepository.find();
+        return await this.distCompRepository.find({ order: { created: "DESC" } });
     }
 
     async getById(id:string):Promise<DistributorCompDTO>{
-        return await this.distCompRepository.findOne(id);
+        const distributorComp = await this.distCompRepository.findOne(id);
+        if(!distributorComp){
+            throw new NotFoundException("Distributor Company Not Found");
+        }
+        return distributorComp;
     }
 
     async create(distCompData:DistributorCompDTO):Promise<DistributorCompDTO>{

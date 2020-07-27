@@ -1,9 +1,9 @@
-import { ProductionCompDTO } from "src/production-comp/production-comp.dto";
-import { DistributorCompDTO } from "src/distributor-comp/distributor-comp.dto";
-import { DirectorDTO } from "src/director/director.dto";
-import { WriterDTO } from "src/writer/writer.dto";
-import { ActorDTO } from "src/actor/actor.dto";
-import { LocationDTO } from "src/location/location.dto";
+import { ProductionCompDTO } from "../../production-comp/production-comp.dto";
+import { DistributorCompDTO } from "../../distributor-comp/distributor-comp.dto";
+import { DirectorDTO } from "../../director/director.dto";
+import { WriterDTO } from "../../writer/writer.dto";
+import { ActorDTO } from "../../actor/actor.dto";
+import { LocationDTO } from "../../location/location.dto";
 
 
 export class FilmResponse{

@@ -11,11 +11,15 @@ export class WriterService {
         private writerRepository:Repository<WriterEntity>){}
         
     async get():Promise<WriterDTO[]>{
-        return await this.writerRepository.find();
+        return await this.writerRepository.find({ order: { created: "DESC" } });
     }
 
     async getByID(id:string):Promise<WriterDTO>{
-        return await this.writerRepository.findOne(id);
+        const writer = await this.writerRepository.findOne(id);
+        if(!writer){
+            throw new NotFoundException("Writer Not Found");
+        }
+        return writer;
     }
 
     async create(writerData:WriterDTO):Promise<WriterDTO>{
@@ -26,7 +30,7 @@ export class WriterService {
         return writer;        
     }
 
-    async update(id:string, writerData:WriterDTO):Promise<WriterDTO>{
+    async update(id:string, writerData:Partial<WriterDTO>):Promise<WriterDTO>{
         const writer = await this.writerRepository.findOne(id);
         if(!writer){
             throw new NotFoundException("Writer Not found");

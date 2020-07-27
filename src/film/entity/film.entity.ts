@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { ProductionCompEntity } from "../../production-comp/production-comp.entity";
-import { DistributorCompEntity } from "src/distributor-comp/distributor-comp.entity";
-import { DirectorEntity } from "src/director/director.entity";
-import { WriterEntity } from "src/writer/writer.entity";
-import { ActorEntity } from "src/actor/actor.entity";
-import { LocationEntity } from "src/location/location.entity";
+import { DistributorCompEntity } from "../../distributor-comp/distributor-comp.entity";
+import { DirectorEntity } from "../../director/director.entity";
+import { WriterEntity } from "../../writer/writer.entity";
+import { ActorEntity } from "../../actor/actor.entity";
+import { LocationEntity } from "../../location/location.entity";
 
 @Entity("film")
 export class FilmEntity {

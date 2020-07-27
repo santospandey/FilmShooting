@@ -4,10 +4,10 @@ import { FilmEntity } from './entity/film.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilmDTO } from './dto/film.dto';
 import { ProductionCompEntity } from 'src/production-comp/production-comp.entity';
-import { DistributorCompEntity } from 'src/distributor-comp/distributor-comp.entity';
-import { ActorEntity } from 'src/actor/actor.entity';
-import { WriterEntity } from 'src/writer/writer.entity';
-import { DirectorEntity } from 'src/director/director.entity';
+import { DistributorCompEntity } from '../distributor-comp/distributor-comp.entity';
+import { ActorEntity } from '../actor/actor.entity';
+import { WriterEntity } from '../writer/writer.entity';
+import { DirectorEntity } from '../director/director.entity';
 import { FilmResponse } from './dto/filmResponse.dto';
 import { LocationEntity } from 'src/location/location.entity';
 
