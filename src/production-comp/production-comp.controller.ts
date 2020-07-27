@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put, Delete, ValidationPipe } from '@nestjs/common';
 import { ProductionCompService } from './production-comp.service';
 import { ProductionCompDTO } from './production-comp.dto';
 
@@ -17,12 +17,12 @@ export class ProductionCompController {
     }
 
     @Post()
-    async createProductionComp(@Body() prodComp:ProductionCompDTO):Promise<ProductionCompDTO>{
+    async createProductionComp(@Body(new ValidationPipe()) prodComp:ProductionCompDTO):Promise<ProductionCompDTO>{
         return await this.productionCompService.create(prodComp);
     }
 
     @Put(":id")
-    async updateProductionComp(@Param("id") id:string, @Body() prodComp:ProductionCompDTO):Promise<ProductionCompDTO>{
+    async updateProductionComp(@Param("id") id:string, @Body(new ValidationPipe()) prodComp:ProductionCompDTO):Promise<ProductionCompDTO>{
         return await this.productionCompService.update(id, prodComp);
     }
 

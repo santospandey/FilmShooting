@@ -5,7 +5,6 @@ import { DistributorCompEntity } from './distributor-comp.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as faker from "faker";
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { fake } from 'faker';
 
 class DistributorCompRepositoryFake {
   public async find(): Promise<void> { };
@@ -101,41 +100,41 @@ describe('DistributorCompService', () => {
     });
   });
 
-  // describe("removing a distributor company", ()=>{
-  //   it("should remove the distributor company", async ()=>{
-  //     const distributorCompanyId = faker.random.uuid().toString();
-  //     const distributorCompany:DistributorCompEntity = {
-  //       id: distributorCompanyId,
-  //       name: fake.name.toString(),
-  //       created: new Date(),
-  //       films: []
-  //     };
+  describe("removing a distributor company", () => {
+    it("should remove the distributor company", async () => {
+      const distributorCompanyId = faker.random.uuid().toString();
+      const distributorCompany: DistributorCompEntity = {
+        id: distributorCompanyId,
+        name: faker.name.toString(),
+        created: new Date(),
+        films: []
+      };
 
-  //     const distributorCompanyFindSpy  = jest.spyOn(distributorCompRepository, 'findOne').mockResolvedValue(distributorCompany);
-  //     const distributorCompanyDeleteSpy = jest.spyOn(distributorCompRepository, 'delete').mockResolvedValue(null);
-  //     const result = distributorCompService.delete(distributorCompanyId);
+      const distributorCompanyFindSpy = jest.spyOn(distributorCompRepository, 'findOne').mockResolvedValue(distributorCompany);
+      const distributorCompanyDeleteSpy = jest.spyOn(distributorCompRepository, 'delete').mockResolvedValue(null);
+      const result = await distributorCompService.delete(distributorCompanyId);
 
+      expect(distributorCompanyFindSpy).toHaveBeenCalledWith(distributorCompanyId);
+      expect(distributorCompanyDeleteSpy).toHaveBeenCalledWith(distributorCompanyId);
+      expect(result).toBe(distributorCompany);
+    });
+  });
 
+  describe("updating a distributor company", () => {
+    it("should update distributor company", async () => {
+      const distributorCompanyId = faker.random.uuid();
+      const distributorCompany: DistributorCompEntity = {
+        id: distributorCompanyId,
+        name: faker.name.toString(),
+        created: new Date(),
+        films: []
+      };
+      const distributorCompanyFindSpy = jest.spyOn(distributorCompRepository, 'findOne').mockResolvedValue(distributorCompany);
+      const distributorCompanyUpdateSpy = jest.spyOn(distributorCompRepository, 'update').mockResolvedValue(null);
 
-  //     expect(distributorCompanyFindSpy).toHaveBeenCalledWith(distributorCompanyId);
-  //     expect(distributorCompanyDeleteSpy).toHaveBeenCalledWith(distributorCompanyId);
-  //     expect(result).toBe(distributorCompany);
-  //   });
-  // });
-
-  // describe("updating a distributor company", ()=>{
-  //   const distributorCompanyId = faker.random.uuid();
-  //     const distributorCompany:DistributorCompEntity = {
-  //       id: distributorCompanyId,
-  //       name: fake.name.toString(),
-  //       created: new Date(),
-  //       films: []
-  //     };
-  //     const distributorCompanyFindSpy  = jest.spyOn(distributorCompRepository, 'findOne').mockResolvedValue(distributorCompany);
-  //     const distributorCompanyUpdateSpy = jest.spyOn(distributorCompRepository, 'update').mockResolvedValue(null);
-
-  //     const result = distributorCompService.update(distributorCompanyId, {name: distributorCompany.name});
-  //     expect(distributorCompanyFindSpy).toHaveBeenCalledWith(distributorCompanyId);
-  //     expect(distributorCompanyUpdateSpy).toHaveBeenCalledWith(distributorCompanyId, {name: distributorCompany.name});
-  // });
+      const result = await distributorCompService.update(distributorCompanyId, { name: distributorCompany.name });
+      expect(distributorCompanyFindSpy).toHaveBeenCalledWith(distributorCompanyId);
+      expect(distributorCompanyUpdateSpy).toHaveBeenCalledWith(distributorCompanyId, { name: distributorCompany.name });
+    });
+  });
 });
