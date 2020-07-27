@@ -7,7 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const options = new DocumentBuilder()
-  .setTitle("Swagger")
+  .setTitle("Film Shooting API")
+  .setDescription("A set of api contains information of film its shooting location, actors, directors, producers etc")
   .build()
 
   const document = SwaggerModule.createDocument(app, options);
