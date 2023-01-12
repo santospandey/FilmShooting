@@ -28,7 +28,7 @@
     "@nestjs/typeorm": "^7.1.0",
     "@types/helmet": "0.0.47",
     "class-transformer": "^0.2.3",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "helmet": "^3.23.3",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
